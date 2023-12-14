@@ -12,7 +12,8 @@ SAN			= -fsanitize=address -g
 # SOURCES
 
 SRC_FILES	=	main \
-				vector/vector3 \
+				vector/Vector3 \
+				camera/Camera \
 
 SRCS		=	$(addsuffix .cpp, $(SRC_FILES))
 OBJS 		=	$(SRCS:.cpp=.o)

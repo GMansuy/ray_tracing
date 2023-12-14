@@ -1,4 +1,5 @@
-# include "vector/vector3.hpp"
+# include "vector/Vector3.hpp"
+# include "camera/Camera.hpp"
 
 int main() {
 
