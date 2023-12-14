@@ -1,8 +1,4 @@
 #!/bin/bash
 
-g++ output.cpp -o output
-./output.exe > image.ppm
-ffmpeg -i image.ppm image.png
-rm image.ppm
-rm output.exe
-xdg-open image.png
+make && ./output > image.ppm && ffmpeg -y -i image.ppm image.png -hide_banner -loglevel error && rm image.ppm && rm output && xdg-open image.png ;
+make fclean ;

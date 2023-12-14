@@ -3,11 +3,11 @@
 
 # include <iostream>
 # include <stdexcept>
-# include "../utils/utils.hpp"
+# include "../../utils/utils.hpp"
 # include "../vector/Vector3.hpp"
 
 // class Vector3;
-typedef Vector3 Point;
+// typedef Vector3 Point;
 
 class Camera {
     public :

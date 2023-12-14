@@ -45,6 +45,8 @@ class Vector3 {
         float z;
 };
 
+using Point = Vector3;
+
 std::ostream & operator<<( std::ostream &stream, Vector3 const &src );
 
 #endif
