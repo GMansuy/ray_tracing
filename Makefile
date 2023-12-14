@@ -1,150 +1,55 @@
 # VARIABLES
 
-NAME		= miniRT
-#NAME_BONUS	= pipex_bonus
+NAME		= output
+CC			= c++
+CFLAGS		= -Wall -Werror -Wextra -MMD -MP -Wshadow
 
-LIB_DIR	 	= libft
-LIB			= libft/libft.a
-
-SRC_DIR		= 	src/
-OBJ_DIR		= 	obj/
-SUBDIR		=	obj/class \
-				obj/utils \
-				obj/render\
-				obj/objects\
-#BONUS_DIR	= src_bonus/
-
-CC			= gcc
-CFLAGS		= -Wall -Werror -Wextra -g -I./srcs/includes -Imlx_linux -MMD -MP
-ADDFLAGS	= -L -lft -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
-
+CLASS		= class/class.a
 RM			= rm -rf
 AR			= ar rcs
-SAN			= -fsanitize=address
+SAN			= -fsanitize=address -g
 
 # SOURCES
 
-SRC_FILES = 	main \
-				class/vector_class \
-				class/vector_utility \
-				class/vector_utility2 \
-				class/vector_utility3 \
-				class/vector_utility4 \
-				class/ray_class \
-				class/cam_class \
-				objects/hittable_list \
-				objects/init_objects \
-				objects/loop_objects \
-				objects/lexeur \
-				objects/lexeur_object \
-				objects/lexeur_geo_obj \
-				objects/lexeur_util \
-				objects/utils2 \
-				objects/parser \
-				objects/new_object \
-				render/render_loop \
-				render/object_renderer \
-				render/display \
-				render/render_sphere \
-				render/render_light \
-				render/render_cylinder \
-				render/render_cylinder2 \
-				render/normal_cy \
-				render/render_plane \
-				render/shadow_render \
-				utils/mlx_fonction \
-				utils/move \
-				utils/get \
-				utils/minmax \
+SRC_FILES	=	main \
+				vector/vector3 \
 
-
-C_FILES		=	$(addsuffix .c, $(SRC_FILES))
-SRCS		=	$(addprefix $(SRC_DIR), $(C_FILES))
-OBJS		=	$(addprefix $(OBJ_DIR), $(C_FILES:.c=.o))
+SRCS		=	$(addsuffix .cpp, $(SRC_FILES))
+OBJS 		=	$(SRCS:.cpp=.o)
 DEPS		=	$(OBJS:.o=.d)
 
-#SRC_FILES_BONUS	=	main child pipes get_files get_cmd free heredoc error
-C_BONUS			=	$(addsuffix _bonus.c, $(SRC_FILES_BONUS))
-SRCS_BONUS		=	$(addprefix $(BONUS_DIR), $(C_BONUS))
-OBJS_BONUS		=	$(addprefix $(OBJ_DIR), $(C_BONUS:.c=.o))
-DEPS_BONUS		=	$(OBJS_BONUS:.o=.d)
 
-#	LOAD BAR
-
-COUNT	:= $(words $(SRC_FILES))
-LOAD	= 0
-DIVIDE	= 0
-SPACE = $(COUNT)
-
-#	 MANDATORY
-all:		 $(LIB) obj $(NAME)
-			
+# 	MANDATORY
+all: 		$(NAME)
 
 $(NAME):	$(OBJS)
-			@$(CC) $(CFLAGS) $^ -o $@ $(LIB) $(ADDFLAGS) 
-			@echo "\e[1A\e[K$(FONT_BOLD)FILES LOAD ! $(FONT_RESET)    $(COUNT)/($(COUNT))"
-			@echo " " 
-			@echo "$(RED)$(NAME) compiled !$(DEF_COLOR)"
+			$(CC) $^ -o $@ $(CFLAGS)
+			@echo "$(GREEN)$(NAME) compiled !$(DEF_COLOR)"
 
-$(OBJ_DIR)%.o:	 $(SRC_DIR)%.c 
-			@$(CC) $(CFLAGS) $(ADDFLAGS) -c -o $@ $< 
-			@$(eval LOAD=$(shell echo $$(($(LOAD)+1))))
-			@$(eval SPACE=$(shell echo $$(($(SPACE)-1)))) 
-			@echo "\e[2A\e[K$(BLUE)Creating object file -> $(WHITE)$(notdir $@)... $(RED)[Done]$(NOC)"
-			@/bin/echo -n "$(FONT_BOLD)Load Files |$(FONT_RESET)" 
-			@load=$(LOAD) ; while [ $${load} -gt 0 ] ; do\
-				/bin/echo -n "=" ;\
-				load=`expr $$load - 1`; \
-			done; \
-			true
-			@space=$(SPACE) ; while [ $${space} -gt 0 ] ; do\
-				/bin/echo -n " " ;\
-				space=`expr $$space - 1`; \
-			done; \
-			true
-			@/bin/echo -n "$(FONT_BOLD)|$(FONT_RESET)"
-			@echo "    $(RED)$(LOAD)/($(COUNT))"
-
-#	BONUS
-bonus:		obj $(LIB) $(NAME_BONUS)
-
-$(NAME_BONUS): $(OBJS_BONUS)
-			@$(CC) $(CFLAGS) $(ADDFLAGS) $^ -o $(NAME_BONUS) $(LIB)
-			@echo "$(RED)$(NAME_BONUS) BONUS compiled !$(CYAN)"
-
-$(OBJ_DIR)%.o:	 $(BONUS_DIR)%.c 
-			@$(CC) $(CFLAGS) -c -o $@ $< 
+%.o:		%.cpp
+			$(CC) $(CFLAGS) -c -o $@ $<
 			@echo "$(BLUE)Creating object file -> $(WHITE)$(notdir $@)... $(RED)[Done]$(NOC)"
 
-$(LIB):
-			@echo "$(MAGENTA)Creating libft files...$(CYAN)"
-			@echo " "
-			@echo " "
-			@echo " "
-			@make --no-print-directory -s -C ./libft
+$(CLASS):
+			@make -C ./class
 
-#	 RULES
-obj:
-			@mkdir -p $(OBJ_DIR)
-			@mkdir -p $(SUBDIR)
+# 	RULES
 
 clean:
-			@make --no-print-directory clean -C $(LIB_DIR)
-			@$(RM) $(OBJ_DIR) $(DEPS_DIR)
+			@$(RM) $(OBJS)
+			@$(RM) $(DEPS)
 			@echo "$(BLUE)$(NAME) object files cleaned!$(DEF_COLOR)"
 
-fclean:		clean
-			@$(RM) -f $(NAME)
-			@$(RM) -f $(NAME_BONUS)
-			@$(RM) -f $(LIB_DIR)/libft.a
+fclean:
+			@make clean
+			@$(RM) $(NAME)
 
-re:			fclean
-			@make --no-print-directory all
+re:
+			@make fclean
+			@make all
 			@echo "$(GREEN)Cleaned and rebuilt everything for $(NAME)!$(DEF_COLOR)"
 
-.PHONY: all clean fclean re	
-
-.SILENT: lib
+.PHONY: all clean fclean re
 
 -include $(DEPS)
 
@@ -162,7 +67,3 @@ BLUE = \033[0;94m
 MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
-FONT_BOLD := $(shell tput bold)
-FONT_RED := $(shell tput setaf 1)
-FONT_RESET := $(shell tput sgr0)
-FONT_CYAN := $(shell tput setaf 6)
