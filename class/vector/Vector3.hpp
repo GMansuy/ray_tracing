@@ -49,4 +49,20 @@ using Point = Vector3;
 
 std::ostream & operator<<( std::ostream &stream, Vector3 const &src );
 
+inline float dot(const Vector3 &u, const Vector3 &v) {
+    return u.getX() * v.getX()
+         + u.getY() * v.getY()
+         + u.getZ() * v.getZ();
+}
+
+inline Vector3 cross(const Vector3 &u, const Vector3 &v) {
+    return Vector3(u.getY() * v.getZ() - u.getZ() * v.getY(),
+                u.getZ() * v.getX() - u.getX() * v.getZ(),
+                u.getX() * v.getY() - u.getY() * v.getX());
+}
+
+inline Vector3 unit_vector(Vector3 v) {
+    return v / v.length();
+}
+
 #endif

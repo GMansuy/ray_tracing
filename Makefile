@@ -1,6 +1,6 @@
 # VARIABLES
 
-NAME		= output
+NAME		= rt
 CC			= c++
 CFLAGS		= -Wall -Werror -Wextra -MMD -MP -Wshadow
 
@@ -12,6 +12,8 @@ SAN			= -fsanitize=address -g
 # SOURCES
 
 SRC_FILES	=	srcs/main \
+				srcs/ray_color \
+				srcs/sphere \
 				class/vector/Vector3 \
 				# class/camera/Camera \
 
